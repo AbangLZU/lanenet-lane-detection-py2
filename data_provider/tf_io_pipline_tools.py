@@ -53,7 +53,8 @@ def write_example_tfrecords(gt_images_paths, gt_binary_images_paths, gt_instance
     :return:
     """
     _tfrecords_dir = ops.split(tfrecords_path)[0]
-    os.makedirs(_tfrecords_dir, exist_ok=True)
+    if not os.path.exists(_tfrecords_dir):
+        os.makedirs(_tfrecords_dir)
 
     log.info('Writing {:s}....'.format(tfrecords_path))
 
@@ -204,10 +205,10 @@ def random_crop_batch_images(gt_image, gt_binary_image, gt_instance_image, cropp
     """
     concat_images = tf.concat([gt_image, gt_binary_image, gt_instance_image], axis=-1)
 
-    concat_cropped_images = tf.image.random_crop(
+    concat_cropped_images = tf.random_crop(
         concat_images,
         [cropped_size[1], cropped_size[0], tf.shape(concat_images)[-1]],
-        seed=tf.random.set_random_seed(1234)
+        seed=tf.set_random_seed(1234)
     )
 
     cropped_gt_image = tf.slice(
@@ -243,7 +244,7 @@ def random_horizon_flip_batch_images(gt_image, gt_binary_image, gt_instance_imag
 
     concat_flipped_images = tf.image.random_flip_left_right(
         image=concat_images,
-        seed=tf.random.set_random_seed(1)
+        seed=tf.set_random_seed(1)
     )
 
     flipped_gt_image = tf.slice(

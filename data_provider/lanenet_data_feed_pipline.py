@@ -123,7 +123,8 @@ class LaneNetDataProducer(object):
             return ret
 
         # make save dirs
-        os.makedirs(save_dir, exist_ok=True)
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
 
         # start generating training example tfrecords
         log.info('Start generating training example tfrecords')

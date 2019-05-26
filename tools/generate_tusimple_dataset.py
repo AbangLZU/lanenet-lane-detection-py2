@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # @Time    : 18-5-18 下午7:31
 # @Author  : MaybeShewill-CV
@@ -142,8 +142,8 @@ def process_tusimple_dataset(src_dir):
     traing_folder_path = ops.join(src_dir, 'training')
     testing_folder_path = ops.join(src_dir, 'testing')
 
-    os.makedirs(traing_folder_path, exist_ok=True)
-    os.makedirs(testing_folder_path, exist_ok=True)
+    os.makedirs(traing_folder_path)
+    os.makedirs(testing_folder_path)
 
     for json_label_path in glob.glob('{:s}/label*.json'.format(src_dir)):
         json_label_name = ops.split(json_label_path)[1]
@@ -159,9 +159,9 @@ def process_tusimple_dataset(src_dir):
     gt_binary_dir = ops.join(traing_folder_path, 'gt_binary_image')
     gt_instance_dir = ops.join(traing_folder_path, 'gt_instance_image')
 
-    os.makedirs(gt_image_dir, exist_ok=True)
-    os.makedirs(gt_binary_dir, exist_ok=True)
-    os.makedirs(gt_instance_dir, exist_ok=True)
+    os.makedirs(gt_image_dir)
+    os.makedirs(gt_binary_dir)
+    os.makedirs(gt_instance_dir)
 
     for json_label_path in glob.glob('{:s}/*.json'.format(traing_folder_path)):
         process_json_file(json_label_path, src_dir, gt_image_dir, gt_binary_dir, gt_instance_dir)

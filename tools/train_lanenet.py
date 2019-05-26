@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 # @Time    : 19-4-24 下午9:33
 # @Author  : MaybeShewill-CV
@@ -116,7 +116,8 @@ def record_training_intermediate_result(gt_images, gt_binary_labels, gt_instance
     :param save_dir:
     :return:
     """
-    os.makedirs(save_dir, exist_ok=True)
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
 
     for index, gt_image in enumerate(gt_images):
         gt_image_name = '{:s}_{:d}_gt_image.png'.format(flag, index + 1)
@@ -378,8 +379,8 @@ def train_lanenet(dataset_dir, weights_path=None, net_flag='vgg'):
 
     # Set tf model save path
     model_save_dir = 'model/tusimple_lanenet_{:s}'.format(net_flag)
-    # if not ops.exists(model_save_dir):
-    #     os.makedirs(model_save_dir)
+    if not ops.exists(model_save_dir):
+        os.makedirs(model_save_dir)
     train_start_time = time.strftime('%Y-%m-%d-%H-%M-%S', time.localtime(time.time()))
     model_name = 'tusimple_lanenet_{:s}_{:s}.ckpt'.format(net_flag, str(train_start_time))
     model_save_path = ops.join(model_save_dir, model_name)
@@ -453,7 +454,7 @@ def train_lanenet(dataset_dir, weights_path=None, net_flag='vgg'):
                          ' lr= {:6f} mean_cost_time= {:5f}s '.
                          format(epoch + 1, train_c, train_binary_loss, train_instance_loss, train_accuracy_figure,
                                 train_fp_figure, train_fn_figure, lr, np.mean(train_cost_time_mean)))
-                train_cost_time_mean.clear()
+                del train_cost_time_mean[:]
 
             # validation part
             val_c, val_accuracy_figure, val_fn_figure, val_fp_figure, val_summary, val_binary_loss, \
@@ -487,7 +488,7 @@ def train_lanenet(dataset_dir, weights_path=None, net_flag='vgg'):
                          ' mean_cost_time= {:5f}s '.
                          format(epoch + 1, val_c, val_binary_loss, val_instance_loss, val_accuracy_figure,
                                 val_fp_figure, val_fn_figure, np.mean(train_cost_time_mean)))
-                train_cost_time_mean.clear()
+                del train_cost_time_mean[:]
 
             if epoch % 2000 == 0:
                 saver.save(sess=sess, save_path=model_save_path, global_step=global_step)
@@ -583,7 +584,8 @@ def train_lanenet_multi_gpu(dataset_dir, weights_path=None, net_flag='vgg'):
 
     # Set tf summary save path
     tboard_save_path = 'tboard/tusimple_lanenet_multi_gpu_{:s}'.format(net_flag)
-    os.makedirs(tboard_save_path, exist_ok=True)
+    if not os.path.exists(tboard_save_path):
+        os.makedirs(tboard_save_path)
 
     summary_writer = tf.summary.FileWriter(tboard_save_path)
 
@@ -605,7 +607,8 @@ def train_lanenet_multi_gpu(dataset_dir, weights_path=None, net_flag='vgg'):
     # set tensorflow saver
     saver = tf.train.Saver()
     model_save_dir = 'model/tusimple_lanenet_multi_gpu_{:s}'.format(net_flag)
-    os.makedirs(model_save_dir, exist_ok=True)
+    if not os.path.exists(model_save_dir):
+        os.makedirs(model_save_dir)
     train_start_time = time.strftime('%Y-%m-%d-%H-%M-%S', time.localtime(time.time()))
     model_name = 'tusimple_lanenet_{:s}_{:s}.ckpt'.format(net_flag, str(train_start_time))
     model_save_path = ops.join(model_save_dir, model_name)
@@ -682,7 +685,7 @@ def train_lanenet_multi_gpu(dataset_dir, weights_path=None, net_flag='vgg'):
                                 lr,
                                 np.mean(train_cost_time_mean))
                          )
-                train_cost_time_mean.clear()
+                del train_cost_time_mean[:]
 
             if epoch % CFG.TRAIN.VAL_DISPLAY_STEP == 0:
                 log.info('Epoch_Val: {:d} total_loss= {:6f}'
@@ -691,7 +694,7 @@ def train_lanenet_multi_gpu(dataset_dir, weights_path=None, net_flag='vgg'):
                                 val_loss_value,
                                 np.mean(val_cost_time_mean))
                          )
-                val_cost_time_mean.clear()
+                del val_cost_time_mean[:]
 
             if epoch % 2000 == 0:
                 saver.save(sess=sess, save_path=model_save_path, global_step=epoch)

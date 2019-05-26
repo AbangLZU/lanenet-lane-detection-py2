@@ -81,5 +81,5 @@ def get_image_summary(img):
     image = img - tf.reduce_min(img)
     image /= tf.reduce_max(img) - tf.reduce_min(img)
     image *= 255
-
+    image = tf.cast(image, tf.float32)
     return image

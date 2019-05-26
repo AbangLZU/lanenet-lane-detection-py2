@@ -1,4 +1,14 @@
-# LaneNet-Lane-Detection
+# LaneNet-Lane-Detection For Python2
+
+The original project, please see [lanenet-lane-detection](https://github.com/MaybeShewill-CV/lanenet-lane-detection)
+
+I modified the original one to make run it in Python2.
+
+Remeber to add the project path to the `$PYTHON_PATH` in the `.bashrc`.
+
+To understand more about the LaneNet paper and this implementation and LaneNetRos implementation, see my CSDN blog at: https://blog.csdn.net/adamshan
+
+# Original readme
 Use tensorflow to implement a Deep Neural Network for real time lane detection mainly based on the IEEE IV conference 
 paper "Towards End-to-End Lane Detection: an Instance Segmentation Approach".You can refer to their paper for details 
 https://arxiv.org/abs/1802.05591. This model consists of a encoder-decoder stage, binary semantic segmentation stage 
